@@ -1,8 +1,27 @@
-## command line text search and replace tool
+## Command line text searching and replacing tool
 
-- takes command line input directory and files names and words to replace
-- recursively replaces all the files in the folders
+- Takes command line argument inputs.
+- Takes directory/file path with substring to match and string to replace it with.
+- Updates all occurrences of subtring we are searching for with replace string.
+- For files, recursively searches every file and updates each file content that has matching substring.
+- In case of overlapping matches, first occurrence is replaced.
 
-### command structure
+### Command line arguments
 
-`./cmd-txtreplace <file/folder link> <target text> <replace text>`
+<b> Read file/directory link </b> <br>
+
+```
+readlink -f <file/directory name>
+```
+
+<b> Execute in terminal </b> <br>
+
+```
+./cmd-txtreplace <file/folder full path> <target-text to match> <replace-text to replace with>
+```
+
+<b> Example </b> <br>
+
+```
+./cmd-txtreplace /home/rony/Documents/Dev/cmd-txtreplace/docs/ in "---REPLACED---"
+```

@@ -23,6 +23,14 @@ void Processor::processor(std::string ref_link, std::string searchKey, std::stri
 
 void Processor::dirProcessor(std::string ref_link, std::string searchKey, std::string replaceKey) {
 
+    for (const auto& entry : fs::directory_iterator(ref_link)) {
+        std::string entryPath = entry.path().string();
+        if (fs::is_regular_file(entry.status())) {
+            fileProcessor(entryPath, searchKey, replaceKey);
+        } else if (fs::is_directory(entry.status())) {
+            dirProcessor(entryPath, searchKey, replaceKey);
+        }
+    }
     
 }
 
