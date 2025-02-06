@@ -12,6 +12,3 @@ add_executable(${PROJECT_NAME}
     main.cpp
     src/Processor.cpp
 )
-
-# Link libraries (if any)
-# target_link_libraries(${PROJECT_NAME} <library_name>)
