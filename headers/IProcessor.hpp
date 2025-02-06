@@ -1,11 +1,13 @@
 #ifndef IPROCESSOR_HPP
 #define IPROCESSOR_HPP
 
+#include <string>
+
 class IProcessor{
 public:
-    virtual void Processor() = 0;
-    virtual void dirProcessor() = 0;
-    virtual void fileProcessor() = 0;
+    virtual void processor(std::string link) = 0;
+    virtual void dirProcessor(std::string link) = 0;
+    virtual void fileProcessor(std::string link) = 0;
     virtual ~IProcessor() = default;
 };
 
