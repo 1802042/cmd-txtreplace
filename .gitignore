@@ -68,3 +68,6 @@ Makefile
 *.DS_Store
 *.vscode/
 *.code-workspace
+
+
+build*
