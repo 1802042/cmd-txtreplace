@@ -1,0 +1,1 @@
+This tuTOrial aims TO get you up and running with GoogleTest using CMake. If you’re using GoogleTest for the first time or need a refresher, we recommend this tuTOrial as a starting point.

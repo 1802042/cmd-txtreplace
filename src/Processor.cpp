@@ -5,38 +5,38 @@
 
 namespace fs = std::filesystem;
 
-void Processor::processor(std::string ref_link, std::string searchKey, std::string replaceKey) {
+void Processor::processor() {
 
-    if (fs::is_directory(ref_link))
+    if (fs::is_directory(m_refLink))
     {
-        dirProcessor(ref_link, searchKey, replaceKey);
+        dirProcessor(m_refLink);
     }
-    else if (fs::is_regular_file(ref_link))
+    else if (fs::is_regular_file(m_refLink))
     {
-        fileProcessor(ref_link, searchKey, replaceKey);
+        fileProcessor(m_refLink);
     }
     else 
     {
-        throw std::runtime_error("Invalid path: " + ref_link);
+        throw std::runtime_error("Invalid path: " + m_refLink);
     }
 }
 
-void Processor::dirProcessor(std::string ref_link, std::string searchKey, std::string replaceKey) {
-
-    for (const auto& entry : fs::directory_iterator(ref_link)) {
+void Processor::dirProcessor(const std::string& refLink) {
+    
+    for (const auto& entry : fs::directory_iterator(refLink)) {
+        
         std::string entryPath = entry.path().string();
         if (fs::is_regular_file(entry.status())) {
-            fileProcessor(entryPath, searchKey, replaceKey);
+            fileProcessor(entryPath);
         } else if (fs::is_directory(entry.status())) {
-            dirProcessor(entryPath, searchKey, replaceKey);
+            dirProcessor(entryPath);
         }
     }
-    
 }
 
-std::string Processor::modifyString(std::string word, std::string searchKey, std::string replaceKey)
+std::string Processor::modifyString(const std::string& word)
 {
-    std::string kmpSeed = searchKey + "$" + word;
+    std::string kmpSeed = m_searchKey + "$" + word;
 
     int seedLength = kmpSeed.size();
     int failureTable[seedLength];
@@ -53,7 +53,7 @@ std::string Processor::modifyString(std::string word, std::string searchKey, std
     }
 
     int wordLen = word.size();
-    int skeyLen = searchKey.size();
+    int skeyLen = m_searchKey.size();
 
     std::string resWord = "";
     for (int i = 0; i < wordLen; )
@@ -64,7 +64,7 @@ std::string Processor::modifyString(std::string word, std::string searchKey, std
             {
                 resWord.pop_back();
             }
-            resWord += replaceKey;
+            resWord += m_replaceKey;
             for (int j = 0; j + 1 < skeyLen && j + i + 1 < wordLen; ++j)
             {
                 resWord += word[i + j + 1];
@@ -80,12 +80,12 @@ std::string Processor::modifyString(std::string word, std::string searchKey, std
     return resWord;
 }
 
-void Processor::fileProcessor(std::string ref_link, std::string searchKey, std::string replaceKey) {
-    
-    std::ifstream file(ref_link);
+void Processor::fileProcessor(const std::string& entryPath) {
+
+    std::ifstream file(entryPath);
 
     if (!file.is_open()) {
-        throw std::runtime_error("Could not open file: " + ref_link);
+        throw std::runtime_error("Could not open file: " + entryPath);
     }
 
     std::stringstream buffer;
@@ -97,13 +97,13 @@ void Processor::fileProcessor(std::string ref_link, std::string searchKey, std::
 
     while (buffer >> word)
     {
-        word = modifyString(word, searchKey, replaceKey);
+        word = modifyString(word);
         if ((uint)updatedFileContent.size() != 0)
             updatedFileContent += " ";
         updatedFileContent += word;
     }
 
-    std::ofstream updatedFile(ref_link);
+    std::ofstream updatedFile(entryPath);
     updatedFile << updatedFileContent;
     updatedFile.close();
 }

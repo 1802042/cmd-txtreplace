@@ -1,5 +1,4 @@
-#pragma once
-#include "src/Processor.hpp"
+#include "ProcessorFactory.hpp"
 
 #include <iostream>
 
@@ -19,8 +18,8 @@ int main(int argc, char* argv[])
     std::string searchKey = argv[2];
     std::string replaceKey = argv[3];
 
-    Processor cmd;
-    cmd.processor(ref_link, searchKey, replaceKey);
+    std::unique_ptr<IProcessor> cmd = ProcessorFactory::createProcessor (ref_link, searchKey, replaceKey);
+    cmd->processor();
 
     return 0;
 }

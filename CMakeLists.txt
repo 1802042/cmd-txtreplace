@@ -11,4 +11,11 @@ include_directories(headers)
 add_executable(${PROJECT_NAME}
     main.cpp
     src/Processor.cpp
+    src/ProcessorFactory.cpp
 )
+
+# Enable testing
+enable_testing()
+
+# Add the test subdirectory
+add_subdirectory(test)
